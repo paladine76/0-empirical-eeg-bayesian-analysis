@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "empirical-eeg-bayesian-analysis"
+version = "0.2.0"
+description = "Bayesian shrinkage variable selection and split-half inference for infant EEG phenotypes (EASE / BATSS)"
+requires-python = ">=3.10"
+
+dependencies = [
+    # core numerics / data
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+
+    # Bayesian sampling
+    "jax>=0.4.20",
+    "jaxlib>=0.4.20",
+    "numpyro>=0.13",
+    "arviz>=0.17",
+
+    # parallel repeats
+    "joblib>=1.3",
+
+    # table display in verbose mode (IPython.display)
+    "ipython>=8.12",
+]
+
+[project.optional-dependencies]
+# pip install -e ".[dev]"  -- needed to run the tests/ suite
+dev = [
+    "pytest>=7.4",
+]
+
+# Only if you later want GPU sampling; not needed for CPU runs.
+gpu = ["jax[cuda11_pip]>=0.4.20,<=0.4.26"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+namespaces = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# tests/ on sys.path so test modules can import MCMC_KW from conftest
+pythonpath = ["."]
+addopts = "-q"
